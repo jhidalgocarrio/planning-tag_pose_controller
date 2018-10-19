@@ -8,6 +8,7 @@ find_package(catkin REQUIRED COMPONENTS
   geometry_msgs
   roscpp
   std_msgs
+  tf
 )
 
 catkin_package(
@@ -16,10 +17,13 @@ catkin_package(
  CATKIN_DEPENDS apriltags2_ros geometry_msgs roscpp std_msgs
  DEPENDS system_lib
 )
+find_package(Eigen3 REQUIRED)
 
  include_directories(
   include
   ${catkin_INCLUDE_DIRS}
+  ${Eigen3_INCLUDE_DIRS}
+
 )
 
 add_library(${PROJECT_NAME}
