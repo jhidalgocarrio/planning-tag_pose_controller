@@ -47,6 +47,8 @@ double PID::getControlSignal(const double& setpoint, const double& measured){
   double error_gradiant = (error - last_error)/params_.sampling_time_secs;
 
   control_output = params_.Kp * error + params_.Ki * error_sum * params_.sampling_time_secs + params_.Kd * error_gradiant;
+  
+  last_error = error;
 
   if (control_output >= params_.upper_limit)
   {
@@ -59,13 +61,13 @@ double PID::getControlSignal(const double& setpoint, const double& measured){
   else
   {
     error_sum += error;
-    last_error = error;
   }
+  return control_output;
 
 }
 
 void PID::debugOutput()
 {
-  printf("Kp: %f \n Ki: %f \n Kd: %f \n upper_limit: %f \n lower_limit: %f \n sampling_time: %f \n scaling_factor: %f", params_.Kp, params_.Ki, params_.Kd,
+  printf("Kp: %f \n Ki: %f \n Kd: %f \n upper_limit: %f \n lower_limit: %f \n sampling_time: %f \n scaling_factor: %f \n", params_.Kp, params_.Ki, params_.Kd,
                       params_.upper_limit, params_.lower_limit, params_.sampling_time_secs, params_.scaling_factor);
 }
