@@ -2,39 +2,59 @@
 
 PID::PID()
 {
-  Kp = 0.01;
-  Ki = 0.01;
-  Kd = 0.0;
-  upper_limit = 1.0;
-  lower_limit = -1.0;
-  scaling_factor = 1.0;
-  sampling_time_secs = 0.1; //in seconds
+  params_.Kp = 0.01;
+  params_.Ki = 0.01;
+  params_.Kd = 0.0;
+  params_.upper_limit = 1.0;
+  params_.lower_limit = -1.0;
+  params_.scaling_factor = 1.0;
+  params_.sampling_time_secs = 0.1; //in seconds
   error_sum = 0.0;
   control_output = 0.0;
 }
 
-PID::PID(double Kp_gain, double Ki_gain, double Kd_gain, double upper, double lower, double scaling)
+PID::PID(const Parameters params)
+{
+  params_.Kp = params.Kp;
+  params_.Ki = params.Ki;
+  params_.Kd = params.Kd;
+  params_.upper_limit = params.upper_limit;
+  params_.lower_limit = params.lower_limit;
+  params_.scaling_factor = params.scaling_factor;
+  params_.sampling_time_secs = params.sampling_time_secs; //in seconds
 
-: Kp(Kp_gain), Ki(Ki_gain), Kd(Kd_gain), upper_limit(upper),
-  lower_limit(lower), scaling_factor(scaling) {}
+}
+
+void PID::setPidParams(double Kp, double Ki, double Kd,
+                       double upper, double lower, double sampling_time,
+                       double scaling_factor)
+{
+  params_.Kp = Kp;
+  params_.Ki = Ki;
+  params_.Kd = Kd;
+  params_.upper_limit = upper;
+  params_.lower_limit = lower;
+  params_.sampling_time_secs = sampling_time;
+  params_.scaling_factor = scaling_factor;
+}
 
 PID::~PID(){}
 
-double PID::getControlSignal(double& setpoint, double& measured){
+double PID::getControlSignal(const double& setpoint, const double& measured){
 
   double error = measured - setpoint;
 
-  double error_gradiant = (error - last_error)/sampling_time_secs;
+  double error_gradiant = (error - last_error)/params_.sampling_time_secs;
 
-  control_output = Kp * error + Ki * error_sum * sampling_time_secs + Kd * error_gradiant;
+  control_output = params_.Kp * error + params_.Ki * error_sum * params_.sampling_time_secs + params_.Kd * error_gradiant;
 
-  if (control_output >= upper_limit)
+  if (control_output >= params_.upper_limit)
   {
-    control_output = upper_limit;
+    control_output = params_.upper_limit;
   }
-  else if (control_output <= lower_limit)
+  else if (control_output <= params_.lower_limit)
   {
-    control_output = lower_limit;
+    control_output = params_.lower_limit;
   }
   else
   {
@@ -42,4 +62,10 @@ double PID::getControlSignal(double& setpoint, double& measured){
     last_error = error;
   }
 
+}
+
+void PID::debugOutput()
+{
+  printf("Kp: %f \n Ki: %f \n Kd: %f \n upper_limit: %f \n lower_limit: %f \n sampling_time: %f \n scaling_factor: %f", params_.Kp, params_.Ki, params_.Kd,
+                      params_.upper_limit, params_.lower_limit, params_.sampling_time_secs, params_.scaling_factor);
 }
