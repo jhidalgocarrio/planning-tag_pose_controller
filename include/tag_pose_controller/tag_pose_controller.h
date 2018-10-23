@@ -9,7 +9,7 @@ public:
 
     TagPoseController();
     ~TagPoseController();
-    const void setLastDetectedPose(const Eigen::Vector3d& position);
+    const void setLastDetectedPosition(const Eigen::Vector3d& position);
     void calculateDistance();
     const double getDistance();
     void calculatePidOutput(double& control_signal, const double desired, const double measured);

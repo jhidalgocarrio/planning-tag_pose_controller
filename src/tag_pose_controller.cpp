@@ -6,7 +6,7 @@ TagPoseController::TagPoseController()
 TagPoseController::~TagPoseController()
 {}
 
-const void TagPoseController::setLastDetectedPose(const Eigen::Vector3d& position)
+const void TagPoseController::setLastDetectedPosition(const Eigen::Vector3d& position)
 
 {
   tag_in_base_pos = position;
