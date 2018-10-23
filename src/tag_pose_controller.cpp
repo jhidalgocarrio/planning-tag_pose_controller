@@ -6,11 +6,10 @@ TagPoseController::TagPoseController()
 TagPoseController::~TagPoseController()
 {}
 
-const void TagPoseController::setLastDetectedPose(const Eigen::Vector3d& position, const Eigen::Vector3d& rotation)
+const void TagPoseController::setLastDetectedPose(const Eigen::Vector3d& position)
 
 {
   tag_in_base_pos = position;
-  tag_in_base_rot = rotation;
 }
 
 void TagPoseController::calculateDistance()
